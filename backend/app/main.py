@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 
 from app.database import init_db
 from app.routes import upload, extract, feedback, export as export_route
+from app.routes import sessions, text_input  # v2.0 routes
 
 
 @asynccontextmanager
@@ -25,7 +26,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="HPES API",
     description="Hybrid-Professional Extraction System API",
-    version="1.0.0",
+    version="2.0.0",  # Updated to v2.0
     lifespan=lifespan
 )
 
@@ -38,20 +39,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
+# Include v1.0 routers
 app.include_router(upload.router)
 app.include_router(extract.router)
 app.include_router(feedback.router)
 app.include_router(export_route.router)
+
+# Include v2.0 routers
+app.include_router(sessions.router)
+app.include_router(text_input.router)
 
 
 @app.get("/")
 def root():
     """Root endpoint."""
     return {
-        "message": "HPES API",
-        "version": "1.0.0",
-        "docs": "/docs"
+        "message": "HPES API v2.0",
+        "version": "2.0.0",
+        "docs": "/docs",
+        "features": ["sessions", "text-input", "batch-processing"]
     }
 
 
