@@ -36,8 +36,13 @@ class FileMetadata(Base):
     file_hash = Column(String, unique=True, index=True)  # SHA-256 for deduplication
     upload_date = Column(DateTime, default=datetime.utcnow)
     
+    # v2.0: Batch processing support
+    batch_id = Column(String, nullable=True, index=True)
+    processing_status = Column(String, default="pending")  # pending, processing, complete, error
+    
     # Relationships
     blocks = relationship("ExtractedBlock", back_populates="file")
+    sessions = relationship("SessionFile", back_populates="file")
 
 
 class ExtractedBlock(Base):
@@ -46,6 +51,9 @@ class ExtractedBlock(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     file_id = Column(Integer, ForeignKey("file_metadata.id"), nullable=False)
+    
+    # v2.0: Session support
+    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=True, index=True)
     
     # Block content
     content = Column(Text, nullable=False)
@@ -84,3 +92,58 @@ class UserFeedback(Base):
     
     # Relationships
     block = relationship("ExtractedBlock", back_populates="feedbacks")
+
+
+# ============================================================================
+# v2.0 Models
+# ============================================================================
+
+class Session(Base):
+    """User session for batch processing and state management."""
+    __tablename__ = "sessions"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    session_metadata = Column(Text, nullable=True)  # JSON stored as TEXT (renamed from 'metadata')
+    
+    # Relationships
+    files = relationship("SessionFile", back_populates="session")
+    blocks = relationship("ExtractedBlock", foreign_keys="ExtractedBlock.session_id")
+
+
+class SessionFile(Base):
+    """Many-to-many relationship between sessions and files."""
+    __tablename__ = "session_files"
+    
+    session_id = Column(Integer, ForeignKey("sessions.id"), primary_key=True)
+    file_id = Column(Integer, ForeignKey("file_metadata.id"), primary_key=True)
+    added_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    session = relationship("Session", back_populates="files")
+    file = relationship("FileMetadata", back_populates="sessions")
+
+
+class ExtractionStats(Base):
+    """Daily aggregated statistics for analytics."""
+    __tablename__ = "extraction_stats"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    date = Column(DateTime, nullable=False, unique=True, index=True)
+    total_files = Column(Integer, default=0)
+    total_blocks = Column(Integer, default=0)
+    language_stats = Column(Text, nullable=True)  # JSON: {"python": 15, "javascript": 10, ...}
+    avg_confidence = Column(Float, default=0.0)
+
+
+class TextInput(Base):
+    """Direct text/markdown inputs from users."""
+    __tablename__ = "text_inputs"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(Text, nullable=False)
+    source_type = Column(String, default="paste")  # 'paste' or 'markdown'
+    created_at = Column(DateTime, default=datetime.utcnow)
+    file_hash = Column(String, unique=True, index=True)  # For deduplication
