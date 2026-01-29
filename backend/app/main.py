@@ -1,13 +1,20 @@
 """
 HPES FastAPI Application
 """
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import FileResponse
 from contextlib import asynccontextmanager
+import os
 
 from app.database import init_db
 from app.routes import upload, extract, feedback, export as export_route
 from app.routes import sessions, text_input  # v2.0 routes
+
+# Setup Jinja2 templates
+template_dir = os.path.join(os.path.dirname(__file__), "templates")
+templates = Jinja2Templates(directory=template_dir)
 
 
 @asynccontextmanager
@@ -51,17 +58,23 @@ app.include_router(text_input.router)
 
 
 @app.get("/")
-def root():
-    """Root endpoint."""
-    return {
-        "message": "HPES API v2.0",
-        "version": "2.0.0",
-        "docs": "/docs",
-        "features": ["sessions", "text-input", "batch-processing"]
-    }
+def root(request: Request):
+    """Root endpoint - Serve beautiful bilingual landing page."""
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/health")
 def health_check():
     """Health check endpoint for Docker."""
     return {"status": "healthy"}
+
+
+@app.get("/api-guide")
+def api_guide():
+    """Serve API Guide markdown file."""
+    guide_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "API_GUIDE.md")
+    return FileResponse(
+        guide_path,
+        media_type="text/markdown",
+        filename="API_GUIDE.md"
+    )
