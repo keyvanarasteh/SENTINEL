@@ -1,0 +1,34 @@
+services:
+  engine-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hpes-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./backend/app:/app/app # Hot reload for development
+    environment:
+      - DATABASE_URL=sqlite:///./data/hpes.db
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  dashboard-ui:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: hpes-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - engine-api
+    restart: unless-stopped
+
+volumes:
+  data:
