@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HPES API v2.0 - Hybrid Professional Extraction System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .version {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        .lang-toggle {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .lang-btn {
+            background: none;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 8px 20px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .lang-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .section h3 {
+            color: #555;
+            margin: 15px 0 10px 0;
+            font-size: 18px;
+        }
+
+        .section p,
+        .section li {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .section li::before {
+            content: "→ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .endpoint {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+
+        .endpoint .method {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .endpoint .method.post {
+            background: #007bff;
+        }
+
+        .endpoint .method.delete {
+            background: #dc3545;
+        }
+
+        .endpoint .method.put {
+            background: #ffc107;
+        }
+
+        .endpoint-path {
+            font-family: monospace;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🛡️ HPES API</div>
+            <div class="version">v2.0.0</div>
+            <div class="subtitle">Hybrid Professional Extraction System</div>
+            <div class="status-badge">🟢 ONLINE</div>
+        </div>
+
+        <div class="lang-toggle">
+            <button class="lang-btn active" onclick="showLang('en')">English</button>
+            <button class="lang-btn" onclick="showLang('tr')">Türkçe</button>
+        </div>
+
+        <!-- English Content -->
+        <div id="content-en">
+            <div class="section">
+                <h2>🚀 Welcome to HPES API!</h2>
+                <p>HPES is a powerful code and configuration extraction system that automatically extracts code blocks
+                    from documents, text, and files.</p>
+
+                <h3>✨ What can you do?</h3>
+                <ul>
+                    <li>Upload PDF, DOCX, or text files for code extraction</li>
+                    <li>Paste code directly without file upload</li>
+                    <li>Organize files into sessions (projects)</li>
+                    <li>Validate code with Tree-sitter parsers</li>
+                    <li>Export extracted blocks as ZIP files</li>
+                    <li>Provide feedback to improve accuracy</li>
+                </ul>
+            </div>
+
+            <h2 style="text-align: center; margin: 30px 0; color: #333;">📚 Quick Links</h2>
+
+            <div class="cards">
+                <a href="/docs" class="card">
+                    <div class="card-icon">📖</div>
+                    <h3>Interactive API Docs</h3>
+                    <p>Swagger UI - Test all endpoints directly in your browser</p>
+                </a>
+
+                <a href="/redoc" class="card">
+                    <div class="card-icon">📘</div>
+                    <h3>ReDoc Documentation</h3>
+                    <p>Beautiful API reference with detailed schemas</p>
+                </a>
+
+                <a href="https://github.com/Kadiraricii/SENTINEL" class="card" target="_blank">
+                    <div class="card-icon">💻</div>
+                    <h3>GitHub Repository</h3>
+                    <p>View source code and contribute to the project</p>
+                </a>
+
+                <a href="/api-guide" class="card">
+                    <div class="card-icon">📄</div>
+                    <h3>User Guide</h3>
+                    <p>Complete usage guide with examples (API_GUIDE.md)</p>
+                </a>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Quick Start</h2>
+
+                <h3>1. Health Check</h3>
+                <div class="code-block">curl http://localhost:8000/health</div>
+
+                <h3>2. Upload a File</h3>
+                <div class="code-block">curl -X POST "http://localhost:8000/api/upload" -F "file=@yourfile.pdf"</div>
+
+                <h3>3. Process Text Directly</h3>
+                <div class="code-block">curl -X POST "http://localhost:8000/api/input/text" \
+                    -H "Content-Type: application/json" \
+                    -d '{"content": "def hello():\n print(\"Hi\")", "source_type": "paste"}'</div>
+            </div>
+
+            <div class="section">
+                <h2>🔗 Available Endpoints</h2>
+
+                <h3>Session Management</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/sessions</span> - Create session
+                </div>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="endpoint-path">/api/sessions</span> - List sessions
+                </div>
+
+                <h3>File Processing</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/upload</span> - Upload file
+                </div>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/extract/{file_id}</span> - Extract code
+                </div>
+
+                <h3>Text Input</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/input/text</span> - Process pasted text
+                </div>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="endpoint-path">/api/input/history</span> - Get history
+                </div>
+
+                <p style="margin-top: 15px;">👉 <a href="/docs" style="color: #667eea; font-weight: 600;">View all
+                        endpoints in Swagger</a></p>
+            </div>
+        </div>
+
+        <!-- Turkish Content -->
+        <div id="content-tr" class="hidden">
+            <div class="section">
+                <h2>🚀 HPES API'ye Hoş Geldiniz!</h2>
+                <p>HPES, belgeler, metinler ve dosyalardan otomatik olarak kod bloklarını çıkaran güçlü bir kod ve
+                    konfigürasyon ayıklama sistemidir.</p>
+
+                <h3>✨ Neler yapabilirsiniz?</h3>
+                <ul>
+                    <li>Kod çıkarma için PDF, DOCX veya metin dosyaları yükleyin</li>
+                    <li>Dosya yüklemeden doğrudan kod yapıştırın</li>
+                    <li>Dosyaları session'larda (projelerde) organize edin</li>
+                    <li>Tree-sitter parser'ları ile kod doğrulayın</li>
+                    <li>Çıkarılan blokları ZIP dosyası olarak indirin</li>
+                    <li>Doğruluğu artırmak için geri bildirim verin</li>
+                </ul>
+            </div>
+
+            <h2 style="text-align: center; margin: 30px 0; color: #333;">📚 Hızlı Bağlantılar</h2>
+
+            <div class="cards">
+                <a href="/docs" class="card">
+                    <div class="card-icon">📖</div>
+                    <h3>İnteraktif API Dokümanları</h3>
+                    <p>Swagger UI - Tüm endpoint'leri tarayıcıda test edin</p>
+                </a>
+
+                <a href="/redoc" class="card">
+                    <div class="card-icon">📘</div>
+                    <h3>ReDoc Dokümantasyonu</h3>
+                    <p>Detaylı şemalarla güzel API referansı</p>
+                </a>
+
+                <a href="/api-guide" class="card">
+                    <div class="card-icon">📄</div>
+                    <h3>Kullanım Kılavuzu</h3>
+                    <p>Örneklerle tam kullanım kılavuzu (backend/API_GUIDE.md)</p>
+                </a>
+
+                <a href="https://github.com/Kadiraricii/SENTINEL" class="card" target="_blank">
+                    <div class="card-icon">💻</div>
+                    <h3>GitHub Repository</h3>
+                    <p>Kaynak kodunu görüntüle ve projeye katkıda bulun</p>
+                </a>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Hızlı Başlangıç</h2>
+
+                <h3>1. Sağlık Kontrolü</h3>
+                <div class="code-block">curl http://localhost:8000/health</div>
+
+                <h3>2. Dosya Yükle</h3>
+                <div class="code-block">curl -X POST "http://localhost:8000/api/upload" -F "file=@dosyaniz.pdf"</div>
+
+                <h3>3. Metni Doğrudan İşle</h3>
+                <div class="code-block">curl -X POST "http://localhost:8000/api/input/text" \
+                    -H "Content-Type: application/json" \
+                    -d '{"content": "def merhaba():\n print(\"Selam\")", "source_type": "paste"}'</div>
+            </div>
+
+            <div class="section">
+                <h2>🔗 Mevcut Endpoint'ler</h2>
+
+                <h3>Session Yönetimi</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/sessions</span> - Session oluştur
+                </div>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="endpoint-path">/api/sessions</span> - Session'ları listele
+                </div>
+
+                <h3>Dosya İşleme</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/upload</span> - Dosya yükle
+                </div>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/extract/{file_id}</span> - Kod çıkar
+                </div>
+
+                <h3>Metin Girişi</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/api/input/text</span> - Yapıştırılan metni işle
+                </div>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="endpoint-path">/api/input/history</span> - Geçmişi getir
+                </div>
+
+                <p style="margin-top: 15px;">👉 <a href="/docs" style="color: #667eea; font-weight: 600;">Tüm
+                        endpoint'leri Swagger'da görüntüle</a></p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>HPES v2.0.0 | Hybrid Professional Extraction System</p>
+            <p>Built with FastAPI | © 2026</p>
+        </div>
+    </div>
+
+    <script>
+        function showLang(lang) {
+            // Hide all content
+            document.getElementById('content-en').classList.add('hidden');
+            document.getElementById('content-tr').classList.add('hidden');
+
+            // Show selected content
+            document.getElementById('content-' + lang).classList.remove('hidden');
+
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>
