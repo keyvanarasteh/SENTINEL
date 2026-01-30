@@ -1,49 +1,6 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-*.egg-info/
+node_modules/
 dist/
 build/
-.venv/
-venv/
-env/
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-data/
-
-# Tree-sitter grammars
-backend/grammars/
-
-# Environment
-.env
-.env.local
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
 .DS_Store
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Frontend
-frontend/node_modules/
-frontend/dist/
-frontend/.vite/
-
-# Uploads
-uploads/
-temp/
-*.tmp
-
-# Logs
+.env
 *.log
