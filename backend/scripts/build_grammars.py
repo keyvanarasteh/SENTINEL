@@ -16,6 +16,12 @@ GRAMMARS = {
     "cpp": "https://github.com/tree-sitter/tree-sitter-cpp",
     "go": "https://github.com/tree-sitter/tree-sitter-go",
     "rust": "https://github.com/tree-sitter/tree-sitter-rust",
+    "ruby": "https://github.com/tree-sitter/tree-sitter-ruby",
+    "php": "https://github.com/tree-sitter/tree-sitter-php",
+    "c_sharp": "https://github.com/tree-sitter/tree-sitter-c-sharp",
+    "swift": "https://github.com/tree-sitter/tree-sitter-swift",
+    "kotlin": "https://github.com/fwcd/tree-sitter-kotlin",
+    "bash": "https://github.com/tree-sitter/tree-sitter-bash",
 }
 
 GRAMMAR_DIR = Path(__file__).parent.parent / "grammars"
@@ -41,12 +47,27 @@ def build_grammar(name: str, repo_url: str):
     try:
         from tree_sitter import Language
         
-        # Special handling for TypeScript (has multiple languages)
+        # Special handling for TypeScript and PHP
         if name == "typescript":
             Language.build_library(
                 str(GRAMMAR_DIR / f"{name}.so"),
                 [str(grammar_path / "typescript"), str(grammar_path / "tsx")]
             )
+        elif name == "php":
+             # PHP repo now splits into php and php_only
+             # We use the 'php' directory which includes HTML interop if available, or just the base
+             php_src = grammar_path / "php"
+             if php_src.exists():
+                 Language.build_library(
+                    str(GRAMMAR_DIR / f"{name}.so"),
+                    [str(php_src)]
+                 )
+             else:
+                 # Fallback to root if structure is different
+                 Language.build_library(
+                    str(GRAMMAR_DIR / f"{name}.so"),
+                    [str(grammar_path)]
+                 )
         else:
             Language.build_library(
                 str(GRAMMAR_DIR / f"{name}.so"),
