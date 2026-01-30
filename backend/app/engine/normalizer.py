@@ -38,8 +38,9 @@ class FileNormalizer:
         if not path.exists():
             raise FileNotFoundError(f"File not found: {file_path}")
         
-        if path.suffix.lower() not in self.SUPPORTED_FORMATS:
-            raise ValueError(f"Unsupported format: {path.suffix}")
+        if path.suffix.lower() not in self.SUPPORTED_FORMATS and path.suffix != '':
+            # Try to process as text for unknown extensions
+            pass
         
         # Extract text based on format
         if path.suffix.lower() == '.pdf':
@@ -122,6 +123,14 @@ class FileNormalizer:
         """
         # Fix Unicode encoding issues
         text = ftfy.fix_text(text)
+        
+        # Normalize to NFC (canonical composition)
+        import unicodedata
+        text = unicodedata.normalize('NFC', text)
+        
+        # Remove zero-width characters and BOM
+        import re
+        text = re.sub(r'[\u200b-\u200f\ufeff]', '', text)
         
         # Remove invisible control characters (except newline, tab, carriage return)
         allowed_chars = {'\n', '\t', '\r'}
