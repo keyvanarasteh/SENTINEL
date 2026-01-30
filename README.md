@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛡️ SENTINEL-1
+# 🛡️ SENTINEL
 
 ### **Advanced Code & Data Extraction System with Military-Grade Security**
 
@@ -36,11 +36,11 @@
 
 ## 🎯 Overview
 
-**SENTINEL-1** is a state-of-the-art, full-stack application designed for intelligent extraction of code blocks and structured data from diverse sources. Built with a **security-first mindset**, it combines advanced NLP techniques, AST-based validation, and enterprise-grade protection mechanisms to deliver accurate, safe, and production-ready extraction.
+**SENTINEL** is a state-of-the-art, full-stack application designed for intelligent extraction of code blocks and structured data from diverse sources. Built with a **security-first mindset**, it combines advanced NLP techniques, AST-based validation, and enterprise-grade protection mechanisms to deliver accurate, safe, and production-ready extraction.
 
-### 🌟 Why SENTINEL-1?
+### 🌟 Why SENTINEL?
 
-| Feature | SENTINEL-1 | Traditional Tools |
+| Feature | SENTINEL | Traditional Tools |
 |---------|-----------|-------------------|
 | **Multi-Source Input** | ✅ Files, URLs, Git Repos, Text | ❌ Limited to files |
 | **AST Validation** | ✅ Tree-sitter for 15+ languages | ❌ Regex-only |
@@ -229,8 +229,8 @@ extraction_12Jan2024.zip
 ### Option 1: One-Command Startup (Recommended)
 
 ```bash
-git clone https://github.com/yourusername/SENTINEL-1.git
-cd SENTINEL-1
+git clone https://github.com/yourusername/SENTINEL.git
+cd SENTINEL
 ./start_local.sh
 ```
 
@@ -542,6 +542,6 @@ Development Time: 16 phases of continuous improvement
 
 ⭐ **Star this repo if you find it useful!**
 
-[Report Bug](https://github.com/yourusername/SENTINEL-1/issues) • [Request Feature](https://github.com/yourusername/SENTINEL-1/issues)
+[Report Bug](https://github.com/yourusername/SENTINEL/issues) • [Request Feature](https://github.com/yourusername/SENTINEL/issues)
 
 </div>
