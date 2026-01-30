@@ -10,12 +10,19 @@ import os
 
 from app.database import init_db
 from app.routes import upload, extract, feedback, export as export_route
-from app.routes import sessions, text_input  # v2.0 routes
+from app.routes import sessions, text_input, batch, analytics, search, git, system  # v2.0 routes
+
 
 # Setup Jinja2 templates
 template_dir = os.path.join(os.path.dirname(__file__), "templates")
 templates = Jinja2Templates(directory=template_dir)
 
+
+from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+from app.middleware.security import SecurityHeadersMiddleware
+
+# ...
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -37,6 +44,20 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# Global Exception Handler (Mask 500 Errors)
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    # Log the error (real world: use proper logger)
+    print(f"CRITICAL ERROR: {str(exc)}")
+    # Return generic message to user
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal Server Error"}
+    )
+
+# Security Middleware
+app.add_middleware(SecurityHeadersMiddleware)
+
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
@@ -55,6 +76,11 @@ app.include_router(export_route.router)
 # Include v2.0 routers
 app.include_router(sessions.router)
 app.include_router(text_input.router)
+app.include_router(batch.router)
+app.include_router(analytics.router)
+app.include_router(search.router)
+app.include_router(git.router)
+app.include_router(system.router)
 
 
 @app.get("/")
