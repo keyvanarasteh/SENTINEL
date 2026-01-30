@@ -15,7 +15,8 @@ class TreeSitterManager:
     
     SUPPORTED_LANGUAGES = {
         'python', 'javascript', 'typescript', 'java',
-        'c', 'cpp', 'go', 'rust'
+        'c', 'cpp', 'go', 'rust',
+        'ruby', 'php', 'c_sharp', 'swift', 'kotlin', 'bash'
     }
     
     def __new__(cls):
@@ -53,13 +54,36 @@ class TreeSitterManager:
             return self.languages[language]
         
         try:
+            import ctypes
             grammar_path = self.grammar_dir / f"{language}.so"
             
             if not grammar_path.exists():
                 print(f"Warning: Grammar not found for {language} at {grammar_path}")
                 return None
             
-            lang = Language(str(grammar_path), language)
+            # Load library
+            lib = ctypes.cdll.LoadLibrary(str(grammar_path))
+            
+            # Get language function
+            # Convention: tree_sitter_{language}
+            func_name = f"tree_sitter_{language}"
+            
+            # Special handling for C#
+            if language == 'c_sharp':
+                func_name = "tree_sitter_c_sharp"
+            
+            try:
+                func = getattr(lib, func_name)
+            except AttributeError:
+                # Fallback for some languages that might use diff naming
+                print(f"Warning: Function {func_name} not found in {grammar_path}")
+                return None
+            
+            # Get pointer
+            func.restype = ctypes.c_void_p
+            ptr = func()
+            
+            lang = Language(ptr)
             self.languages[language] = lang
             
             return lang
@@ -91,8 +115,7 @@ class TreeSitterManager:
             return None
         
         try:
-            parser = Parser()
-            parser.set_language(lang)
+            parser = Parser(lang)
             self.parsers[language] = parser
             
             return parser
