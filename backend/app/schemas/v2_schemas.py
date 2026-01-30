@@ -112,6 +112,13 @@ class DailyStats(BaseModel):
     avg_confidence: float
 
 
+class FileStats(BaseModel):
+    file_id: int
+    filename: str
+    block_count: int
+    language: Optional[str] = None
+
+
 class AnalyticsTrends(BaseModel):
     daily_stats: List[DailyStats]
     date_range: str
@@ -150,3 +157,41 @@ class SearchResponse(BaseModel):
     results: List[SearchResult]
     page: int = 1
     per_page: int = 20
+
+
+# ============================================================================
+# Git Integration Schemas
+# ============================================================================
+
+class GitAnalysisRequest(BaseModel):
+    repo_url: str
+    branch: Optional[str] = None
+
+
+class GitAnalysisRequest(BaseModel):
+    repo_url: str
+    branch: Optional[str] = None
+
+
+class GitFile(BaseModel):
+    path: str
+    id: int
+
+
+class GitAnalysisResponse(BaseModel):
+    batch_id: str
+    message: str
+    repo_name: str
+    file_count: int
+    files: List[GitFile] = []
+
+
+class GitEstimateRequest(BaseModel):
+    repo_url: str
+
+
+class GitEstimateResponse(BaseModel):
+    size_mb: float
+    estimated_seconds: int
+    file_count: Optional[int] = None
+

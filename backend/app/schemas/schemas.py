@@ -59,3 +59,14 @@ class ExportResponse(BaseModel):
     file_path: str
     total_files: int
     categories: dict
+
+
+class BatchDeleteRequest(BaseModel):
+    """Request for bulk deletion."""
+    block_ids: List[int]
+
+
+class UpdateBlockRequest(BaseModel):
+    """Request to update block content."""
+    content: str
+    language: Optional[str] = None
