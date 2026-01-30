@@ -13,11 +13,24 @@ from app.schemas.schemas import FileUploadResponse
 
 router = APIRouter(prefix="/api", tags=["upload"])
 
+# Use proper path relative to project root
+import os
+import re
+import unicodedata
 
-UPLOAD_DIR = Path(__file__).parent.parent.parent.parent / "data" / "uploads"
+UPLOAD_DIR = Path(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))) / "data" / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB
+
+def secure_filename(filename: str) -> str:
+    """
+    Sanitize filename to prevent path traversal and unsafe characters.
+    """
+    filename = unicodedata.normalize('NFKD', filename).encode('ascii', 'ignore').decode('ascii')
+    filename = re.sub(r'[^\w\.\-]', '_', filename)
+    filename = filename.strip('._')
+    return filename
 
 
 @router.post("/upload", response_model=FileUploadResponse)
@@ -74,18 +87,28 @@ async def upload_file(
             message="File already exists (duplicate detected)"
         )
     
-    # Save file to disk
-    safe_filename = f"{file_hash[:16]}_{file.filename}"
+    # Save file to disk with Hardening
+    # 1. Sanitize filename
+    safe_name = secure_filename(file.filename)
+    safe_filename = f"{file_hash[:16]}_{safe_name}"
+    
     file_path = UPLOAD_DIR / safe_filename
     
     with open(file_path, 'wb') as f:
         f.write(content)
+
+    # 3. Strip Executable Permissions (Prevent Code Execution)
+    # chmod 644: Owner read/write, Group read, Others read. NO EXECUTE.
+    try:
+        os.chmod(file_path, 0o644)
+    except Exception as e:
+        print(f"Warning: Failed to chmod file {file_path}: {e}")
     
     # Save metadata to database
     file_metadata = FileMetadata(
         filename=safe_filename,
-        original_filename=file.filename,
-        file_type=file_ext,
+        original_filename=safe_name, # Store sanitized name
+        file_type=file_ext.lstrip('.'),  # Remove leading dot
         file_size=file_size,
         file_hash=file_hash
     )
