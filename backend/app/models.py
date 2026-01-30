@@ -40,6 +40,9 @@ class FileMetadata(Base):
     batch_id = Column(String, nullable=True, index=True)
     processing_status = Column(String, default="pending")  # pending, processing, complete, error
     
+    # Store absolute path for Git/Local files
+    original_path = Column(String, nullable=True) 
+    
     # Relationships
     blocks = relationship("ExtractedBlock", back_populates="file")
     sessions = relationship("SessionFile", back_populates="file")
