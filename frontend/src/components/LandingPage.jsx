@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { SparklesCore } from './ui/sparkles';
+import VaporizeTextCycle, { Tag } from './ui/VaporizeTextCycle';
 import { ChevronDown } from 'lucide-react';
 
 function LandingPage({ onComplete }) {
@@ -105,7 +106,7 @@ function LandingPage({ onComplete }) {
             }}
             className="h-screen w-full bg-black flex flex-col items-center justify-center overflow-hidden fixed inset-0 z-[100]"
         >
-            {/* Sparkles Background */}
+            {/* Sparkles Background (Restored) */}
             <div className="w-full absolute inset-0 h-screen">
                 <SparklesCore
                     id="tsparticlesfullpage"
@@ -120,14 +121,32 @@ function LandingPage({ onComplete }) {
             </div>
 
             {/* Content */}
-            <div className="relative z-20 flex flex-col items-center justify-center gap-6 px-4">
-                {/* Main Title - Solid White */}
-                <h1 className="text-7xl md:text-8xl lg:text-9xl font-extrabold text-center text-white drop-shadow-[0_0_80px_rgba(255,255,255,0.3)] tracking-tighter">
-                    SENTINEL
-                </h1>
+            <div className="relative z-20 flex flex-col items-center justify-center gap-8 px-4 w-full">
+                {/* Main Title - Vaporized */}
+                <div className="h-[180px] w-full flex justify-center items-center">
+                    <VaporizeTextCycle
+                        texts={["SENTINEL", "INTELLIGENCE", "EXTRACTION"]}
+                        font={{
+                            fontFamily: "Inter, sans-serif",
+                            fontSize: "120px",
+                            fontWeight: 900
+                        }}
+                        color="rgba(255, 255, 255, 1)"
+                        spread={8}
+                        density={10}
+                        animation={{
+                            vaporizeDuration: 2,
+                            fadeInDuration: 0.5,
+                            waitDuration: 3
+                        }}
+                        direction="left-to-right"
+                        alignment="center"
+                        tag={Tag.H1}
+                    />
+                </div>
 
                 {/* Subtitle - Detailed Acronym */}
-                <p className="text-gray-400 text-sm md:text-base lg:text-lg font-mono text-center max-w-4xl tracking-wide uppercase">
+                <p className="text-gray-400 text-sm md:text-base lg:text-lg font-mono text-center max-w-4xl tracking-widest uppercase opacity-80">
                     Sentinel Extraction Network Technology Intelligence Node Engine Logic
                 </p>
             </div>

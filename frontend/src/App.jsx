@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import UploadPage from './pages/Upload';
 import SearchPage from './pages/Search';
 import HistoryPage from './pages/History';
+import QAPage from './pages/QAPage';
 import LandingPage from './components/LandingPage';
 import { Toaster } from './components/ui/sonner';
 import CommandMenu from './components/CommandMenu';
@@ -40,6 +41,7 @@ function App() {
                         <Route path="upload" element={<UploadPage />} />
                         <Route path="search" element={<SearchPage />} />
                         <Route path="history" element={<HistoryPage />} />
+                        <Route path="qa" element={<QAPage />} />
                     </Route>
                 </Routes>
             </motion.div>

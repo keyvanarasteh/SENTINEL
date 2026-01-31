@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Upload, Search, Database } from 'lucide-react';
+import { LayoutDashboard, Upload, Search, Database, HelpCircle } from 'lucide-react';
 
 const SidebarItem = ({ to, icon: Icon, label }) => (
     <NavLink
@@ -29,7 +29,7 @@ const Layout = () => {
                 {/* Logo */}
                 <div className="p-3 mb-4 mt-8">
                     <div className="text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600 text-center tracking-wide">
-                        HPES
+                        SENTINEL
                     </div>
                     <div className="text-[8px] text-gray-500 text-center mt-0.5">v2.0</div>
                 </div>
@@ -40,6 +40,7 @@ const Layout = () => {
                     <SidebarItem to="/upload" icon={Upload} label="Upload & Process" />
                     <SidebarItem to="/search" icon={Search} label="Search Engine" />
                     <SidebarItem to="/history" icon={Database} label="History" />
+                    <SidebarItem to="/qa" icon={HelpCircle} label="Knowledge Base" />
                 </nav>
 
                 {/* Bottom User Section */}
