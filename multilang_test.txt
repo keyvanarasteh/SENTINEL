@@ -1,0 +1,28 @@
+#!/bin/bash
+echo "Starting script"
+export PATH=$PATH:/custom
+
+<?php
+namespace App;
+class User {
+    public function getName() {
+        return "Test";
+    }
+}
+?>
+
+module Config
+  def self.load
+    puts "Loading"
+  end
+end
+
+func main() {
+    fmt.Println("Go Code")
+}
+
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
