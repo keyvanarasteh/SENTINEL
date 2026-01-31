@@ -198,18 +198,17 @@ const GitImport = ({ onImportSuccess }) => {
             await new Promise((resolve) => {
                 const interval = setInterval(async () => {
                     try {
-                        // Check batch status using API client (handles base URL)
-                        const status = await getBatchStatus(batchId);
+                        // OPTIMIZATION: Stop polling if we already know it's ready
+                        if (!analysisReady) {
+                            // Check batch status using API client (handles base URL)
+                            const status = await getBatchStatus(batchId);
 
-                        // Check if complete
-                        if (status.overall_status === 'complete' || status.overall_status === 'partial_failure') {
-                            if (!analysisReady) {
+                            // Check if complete
+                            if (status.overall_status === 'complete' || status.overall_status === 'partial_failure') {
                                 setAnalysisReady(true);
                                 setAnalysisResult(result);
                                 setResolveWait(() => resolve); // Store resolver to call later
                             }
-
-                            // If we already set ready, we just wait for user to click skip OR time to run out
                         }
                     } catch (err) {
                         console.error("Polling error", err);
