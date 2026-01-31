@@ -21,3 +21,7 @@ frontend/node_modules/
 * 2.jsx
 * 2.md
 * 2.txt
+
+# Build Artifacts & Grammars
+*.so
+backend/grammars/

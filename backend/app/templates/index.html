@@ -305,13 +305,13 @@
                 <h2>🎯 Quick Start</h2>
 
                 <h3>1. Health Check</h3>
-                <div class="code-block">curl http://localhost:8000/health</div>
+                <div class="code-block">curl http://localhost:8002/health</div>
 
                 <h3>2. Upload a File</h3>
-                <div class="code-block">curl -X POST "http://localhost:8000/api/upload" -F "file=@yourfile.pdf"</div>
+                <div class="code-block">curl -X POST "http://localhost:8002/api/upload" -F "file=@yourfile.pdf"</div>
 
                 <h3>3. Process Text Directly</h3>
-                <div class="code-block">curl -X POST "http://localhost:8000/api/input/text" \
+                <div class="code-block">curl -X POST "http://localhost:8002/api/input/text" \
                     -H "Content-Type: application/json" \
                     -d '{"content": "def hello():\n print(\"Hi\")", "source_type": "paste"}'</div>
             </div>
@@ -404,13 +404,13 @@
                 <h2>🎯 Hızlı Başlangıç</h2>
 
                 <h3>1. Sağlık Kontrolü</h3>
-                <div class="code-block">curl http://localhost:8000/health</div>
+                <div class="code-block">curl http://localhost:8002/health</div>
 
                 <h3>2. Dosya Yükle</h3>
-                <div class="code-block">curl -X POST "http://localhost:8000/api/upload" -F "file=@dosyaniz.pdf"</div>
+                <div class="code-block">curl -X POST "http://localhost:8002/api/upload" -F "file=@dosyaniz.pdf"</div>
 
                 <h3>3. Metni Doğrudan İşle</h3>
-                <div class="code-block">curl -X POST "http://localhost:8000/api/input/text" \
+                <div class="code-block">curl -X POST "http://localhost:8002/api/input/text" \
                     -H "Content-Type: application/json" \
                     -d '{"content": "def merhaba():\n print(\"Selam\")", "source_type": "paste"}'</div>
             </div>
