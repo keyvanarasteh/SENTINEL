@@ -12,6 +12,9 @@ backend/scripts/data/
 backend/tests/data/
 frontend/public/
 frontend/node_modules/
+frontend/dist/
+frontend/.env
+*.env.local
 
 # macOS
 .DS_Store
