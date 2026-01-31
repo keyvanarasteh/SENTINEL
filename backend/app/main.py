@@ -58,6 +58,13 @@ async def global_exception_handler(request: Request, exc: Exception):
 # Security Middleware
 app.add_middleware(SecurityHeadersMiddleware)
 
+# @app.middleware("http")
+# async def log_requests(request: Request, call_next):
+#     print(f"DEBUG MIDDLEWARE: Request {request.method} {request.url.path}")
+#     response = await call_next(request)
+#     print(f"DEBUG MIDDLEWARE: Response {response.status_code}")
+#     return response
+
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,

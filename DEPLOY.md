@@ -24,7 +24,7 @@ ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
 
 2. Run with Gunicorn (Production Server):
    ```bash
-   gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8000
+   gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app --bind 0.0.0.0:8002
    ```
 
 ### Frontend
@@ -45,4 +45,4 @@ docker-compose up -d --build
 
 ## 5. Monitoring
 - Check logs: `docker logs -f hpes_backend`
-- Health check: `curl http://localhost:8000/api/health`
+- Health check: `curl http://localhost:8002/api/health`

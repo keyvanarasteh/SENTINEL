@@ -37,15 +37,15 @@
 
 When running locally:
 ```
-http://localhost:8000
+http://localhost:8002
 ```
 
 ### Interactive Documentation
 
 FastAPI provides automatic interactive API documentation:
 
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+- **Swagger UI**: http://localhost:8002/docs
+- **ReDoc**: http://localhost:8002/redoc
 
 You can test all endpoints directly from your browser!
 
@@ -55,7 +55,7 @@ Current version: **v2.0.0**
 
 Check version:
 ```bash
-curl http://localhost:8000/
+curl http://localhost:8002/
 ```
 
 Response:
@@ -117,7 +117,7 @@ Sessions help you organize files into projects or categories.
 
 **cURL Example**:
 ```bash
-curl -X POST "http://localhost:8000/api/sessions" \
+curl -X POST "http://localhost:8002/api/sessions" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "My Python Project",
@@ -161,7 +161,7 @@ curl -X POST "http://localhost:8000/api/sessions" \
 
 **cURL Example**:
 ```bash
-curl "http://localhost:8000/api/sessions?limit=10"
+curl "http://localhost:8002/api/sessions?limit=10"
 ```
 
 ---
@@ -186,7 +186,7 @@ curl "http://localhost:8000/api/sessions?limit=10"
 
 **cURL Example**:
 ```bash
-curl "http://localhost:8000/api/sessions/1"
+curl "http://localhost:8002/api/sessions/1"
 ```
 
 ---
@@ -230,7 +230,7 @@ curl "http://localhost:8000/api/sessions/1"
 
 **cURL Example**:
 ```bash
-curl -X DELETE "http://localhost:8000/api/sessions/1"
+curl -X DELETE "http://localhost:8002/api/sessions/1"
 ```
 
 ---
@@ -249,7 +249,7 @@ curl -X DELETE "http://localhost:8000/api/sessions/1"
 
 **cURL Example**:
 ```bash
-curl -X POST "http://localhost:8000/api/sessions/1/files/5"
+curl -X POST "http://localhost:8002/api/sessions/1/files/5"
 ```
 
 ---
@@ -262,7 +262,7 @@ curl -X POST "http://localhost:8000/api/sessions/1/files/5"
 
 **cURL Example**:
 ```bash
-curl -X DELETE "http://localhost:8000/api/sessions/1/files/5"
+curl -X DELETE "http://localhost:8002/api/sessions/1/files/5"
 ```
 
 ---
@@ -282,7 +282,7 @@ Upload files for code extraction.
 
 **Example using cURL**:
 ```bash
-curl -X POST "http://localhost:8000/api/upload" \
+curl -X POST "http://localhost:8002/api/upload" \
   -F "file=@/path/to/your/file.pdf"
 ```
 
@@ -290,7 +290,7 @@ curl -X POST "http://localhost:8000/api/upload" \
 ```python
 import requests
 
-url = "http://localhost:8000/api/upload"
+url = "http://localhost:8002/api/upload"
 files = {"file": open("document.pdf", "rb")}
 response = requests.post(url, files=files)
 
@@ -370,7 +370,7 @@ Process text or markdown directly without uploading a file.
 ```python
 import requests
 
-url = "http://localhost:8000/api/input/text"
+url = "http://localhost:8002/api/input/text"
 data = {
     "content": """
 def calculate(x, y):
@@ -445,7 +445,7 @@ Extract code/config blocks from uploaded files.
 
 **cURL Example**:
 ```bash
-curl -X POST "http://localhost:8000/api/extract/1"
+curl -X POST "http://localhost:8002/api/extract/1"
 ```
 
 ---
@@ -510,7 +510,7 @@ Export accepted blocks as a ZIP file.
 
 **cURL Example**:
 ```bash
-curl "http://localhost:8000/api/export/1" \
+curl "http://localhost:8002/api/export/1" \
   --output extracted_blocks.zip
 ```
 
@@ -518,7 +518,7 @@ curl "http://localhost:8000/api/export/1" \
 ```python
 import requests
 
-url = "http://localhost:8000/api/export/1"
+url = "http://localhost:8002/api/export/1"
 response = requests.get(url)
 
 with open("extracted_blocks.zip", "wb") as f:
@@ -539,7 +539,7 @@ Upload multiple files at once.
 
 **cURL Example**:
 ```bash
-curl -X POST "http://localhost:8000/api/batch/upload" \
+curl -X POST "http://localhost:8002/api/batch/upload" \
   -F "files=@file1.py" \
   -F "files=@file2.js"
 ```
@@ -620,7 +620,7 @@ Search extracted blocks.
 import requests
 import time
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "http://localhost:8002"
 
 # 1. Create a session
 session_data = {
@@ -686,7 +686,7 @@ for i in range(10):
 """
 
 response = requests.post(
-    "http://localhost:8000/api/input/text",
+    "http://localhost:8002/api/input/text",
     json={"content": code_snippet, "source_type": "paste"}
 )
 
@@ -771,15 +771,15 @@ for block in result['blocks']:
 
 Yerel çalıştırmada:
 ```
-http://localhost:8000
+http://localhost:8002
 ```
 
 ### İnteraktif Dokümantasyon
 
 FastAPI otomatik interaktif API dokümantasyonu sağlar:
 
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+- **Swagger UI**: http://localhost:8002/docs
+- **ReDoc**: http://localhost:8002/redoc
 
 Tüm endpoint'leri tarayıcınızdan doğrudan test edebilirsiniz!
 
@@ -789,7 +789,7 @@ Güncel versiyon: **v2.0.0**
 
 Versiyon kontrolü:
 ```bash
-curl http://localhost:8000/
+curl http://localhost:8002/
 ```
 
 Yanıt:
@@ -851,7 +851,7 @@ Session'lar dosyalarınızı proje veya kategorilere göre organize etmenize yar
 
 **cURL Örneği**:
 ```bash
-curl -X POST "http://localhost:8000/api/sessions" \
+curl -X POST "http://localhost:8002/api/sessions" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Python Projem",
@@ -930,7 +930,7 @@ Kod çıkarma için dosya yükleyin.
 
 **cURL ile Örnek**:
 ```bash
-curl -X POST "http://localhost:8000/api/upload" \
+curl -X POST "http://localhost:8002/api/upload" \
   -F "file=@/yol/to/dosyaniz.pdf"
 ```
 
@@ -938,7 +938,7 @@ curl -X POST "http://localhost:8000/api/upload" \
 ```python
 import requests
 
-url = "http://localhost:8000/api/upload"
+url = "http://localhost:8002/api/upload"
 files = {"file": open("belge.pdf", "rb")}
 response = requests.post(url, files=files)
 
@@ -972,7 +972,7 @@ Dosya yüklemeden doğrudan metin veya markdown işleyin.
 ```python
 import requests
 
-url = "http://localhost:8000/api/input/text"
+url = "http://localhost:8002/api/input/text"
 data = {
     "content": """
 def topla(x, y):
@@ -1002,7 +1002,7 @@ Yüklenen dosyalardan kod/config blokları çıkarın.
 
 **cURL Örneği**:
 ```bash
-curl -X POST "http://localhost:8000/api/extract/1"
+curl -X POST "http://localhost:8002/api/extract/1"
 ```
 
 ---
@@ -1046,7 +1046,7 @@ Kabul edilen blokları ZIP dosyası olarak dışa aktarın.
 
 **cURL Örneği**:
 ```bash
-curl "http://localhost:8000/api/export/1" \
+curl "http://localhost:8002/api/export/1" \
   --output cikarilan_bloklar.zip
 ```
 
@@ -1059,7 +1059,7 @@ curl "http://localhost:8000/api/export/1" \
 ```python
 import requests
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "http://localhost:8002"
 
 # 1. Session oluştur
 session_data = {
@@ -1168,7 +1168,7 @@ print("\n✓ ZIP'e aktarıldı")
 
 ## 📞 Yardım ve Destek
 
-- **API Dokümantasyonu**: http://localhost:8000/docs
+- **API Dokümantasyonu**: http://localhost:8002/docs
 - **Proje GitHub**: [HPES Repository]
 - **Sorunlar**: GitHub Issues
 

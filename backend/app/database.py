@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from pathlib import Path
+import re
 
 # Database file location
 # Resolve to absolute path to avoid issues with relative imports

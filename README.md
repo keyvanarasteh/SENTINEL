@@ -149,7 +149,7 @@ Powerful full-text search with instant results:
 ##### 🚫 **SSRF (Server-Side Request Forgery) Prevention**
 ```python
 # Blocks localhost and private networks
-Blocked: http://localhost:8000/admin
+Blocked: http://localhost:8002/admin
 Blocked: http://192.168.1.1/config
 Blocked: http://10.0.0.1/internal
 ✅ Allowed: https://github.com/user/repo.git
@@ -241,7 +241,7 @@ cd SENTINEL
 
 **Access:**
 - 🌐 Frontend: [http://localhost:5173](http://localhost:5173)
-- 🔧 Backend API: [http://localhost:8000/docs](http://localhost:8000/docs)
+- 🔧 Backend API: [http://localhost:8002/docs](http://localhost:8002/docs)
 
 ### Option 2: Docker Deployment
 
@@ -251,7 +251,7 @@ docker-compose up --build
 
 **Access:**
 - 🌐 Frontend: [http://localhost:3000](http://localhost:3000)
-- 🔧 Backend API: [http://localhost:8000/docs](http://localhost:8000/docs)
+- 🔧 Backend API: [http://localhost:8002/docs](http://localhost:8002/docs)
 
 ### Option 3: Manual Setup
 
@@ -261,7 +261,7 @@ cd backend
 python3 -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload --port 8002
 ```
 
 #### Frontend
@@ -361,7 +361,7 @@ Development: Hot reload (--reload)
 
 ## 📖 API
 
-**Interactive Documentation:** [http://localhost:8000/docs](http://localhost:8000/docs)
+**Interactive Documentation:** [http://localhost:8002/docs](http://localhost:8002/docs)
 
 ### Core Endpoints
 
