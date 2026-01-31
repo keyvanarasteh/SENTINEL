@@ -125,7 +125,7 @@ const GitUserBrowser = ({ onRepoSelect }) => {
                             <div className="absolute -inset-0.5 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full blur opacity-60 group-hover:opacity-80 transition"></div>
                             <div className="relative w-11 h-11 rounded-full border-2 border-white/20 overflow-hidden bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
                                 <img
-                                    src={`https://github.com/${username}.png?size=200`}
+                                    src={`https://github.com/${encodeURIComponent(username)}.png?size=200`}
                                     alt={`@${username}`}
                                     className="w-full h-full object-cover"
                                     loading="lazy"
