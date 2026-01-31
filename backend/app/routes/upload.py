@@ -46,7 +46,8 @@ async def upload_file(
     # Validate file type
     allowed_extensions = {
         '.pdf', '.docx', '.txt', '.md', '.log', '.sh', '.bat',
-        '.config', '.ini', '.env', '.yaml', '.yml', '.json', '.xml'
+        '.config', '.ini', '.env', '.yaml', '.yml', '.json', '.xml',
+        '.html', '.htm', '.css', '.js', '.ts', '.csv', '.sql'
     }
     
     file_ext = Path(file.filename).suffix.lower()

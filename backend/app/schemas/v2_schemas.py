@@ -144,9 +144,13 @@ class SearchResult(BaseModel):
     language: Optional[str]
     confidence_score: float
     file_id: int
-    filename: str
-    created_at: datetime
-    match_score: Optional[float] = None  # Relevance score for text search
+    filename: Optional[str] = None
+    created_at: Optional[datetime] = None
+    match_score: Optional[float] = 0.0  # Relevance score for text search
+    
+    # Secret Detection
+    has_secrets: bool = False
+    secret_type: Optional[str] = None
     
     class Config:
         from_attributes = True
