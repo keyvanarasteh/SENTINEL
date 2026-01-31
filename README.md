@@ -117,6 +117,7 @@ Document Formats:
 - **Monaco Editor:** Full-featured code editor (same as VS Code)
 - **Split View:** Resizable panels to compare original vs extracted content
 - **Regex Guide:** Built-in cheat sheet for advanced search queries (click `?` in search).
+- **Interactive Q&A:** 3D Flip Cards for deep technical FAQs with category filtering.
 
 ---
 
@@ -538,6 +539,7 @@ Development Time: 16 phases of continuous improvement
 - [x] Analytics Dashboard (v2.0)
 - [x] Advanced Search (v2.0)
 - [x] Security Hardening (v2.1)
+- [x] Interactive Q&A Page (v2.1)
 - [ ] PostgreSQL Support (v2.2)
 - [ ] User Authentication (v2.3)
 - [ ] API Rate Limiting (v2.3)
