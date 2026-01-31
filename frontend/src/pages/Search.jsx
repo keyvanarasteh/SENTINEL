@@ -17,6 +17,7 @@ const SearchPage = () => {
     const [totalResults, setTotalResults] = useState(0);
     const [selectedIds, setSelectedIds] = useState(new Set());
     const [editingBlock, setEditingBlock] = useState(null);
+    const [expandedBlocks, setExpandedBlocks] = useState(new Set());
 
     // Dialog States
     const [deleteDialog, setDeleteDialog] = useState({ isOpen: false, blockId: null });
@@ -39,6 +40,19 @@ const SearchPage = () => {
             console.error('Update failed:', err);
             toast.error('Failed to update block');
         }
+    };
+
+    // Toggle expand/collapse for code blocks
+    const toggleExpand = (blockId) => {
+        setExpandedBlocks(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(blockId)) {
+                newSet.delete(blockId);
+            } else {
+                newSet.add(blockId);
+            }
+            return newSet;
+        });
     };
 
     // Filters
@@ -553,22 +567,44 @@ const SearchPage = () => {
                                                 </div>
 
                                                 <div
-                                                    className="rounded-lg overflow-hidden border border-white/5 cursor-pointer relative group/code"
-                                                    onClick={() => toggleSelection(result.block_id)}
+                                                    className="rounded-lg overflow-hidden border border-white/5 relative group/code"
                                                 >
-                                                    <SyntaxHighlighter
-                                                        language={result.language || 'text'}
-                                                        style={vscDarkPlus}
-                                                        customStyle={{
-                                                            margin: 0,
-                                                            padding: '1rem',
-                                                            backgroundColor: 'rgba(0,0,0,0.3)',
-                                                            fontSize: '13px',
-                                                        }}
-                                                        wrapLongLines={true}
+                                                    <div
+                                                        className={`relative ${!expandedBlocks.has(result.block_id) ? 'max-h-[300px] overflow-hidden' : ''}`}
+                                                        onClick={() => toggleSelection(result.block_id)}
                                                     >
-                                                        {result.content}
-                                                    </SyntaxHighlighter>
+                                                        <SyntaxHighlighter
+                                                            language={result.language || 'text'}
+                                                            style={vscDarkPlus}
+                                                            customStyle={{
+                                                                margin: 0,
+                                                                padding: '1rem',
+                                                                backgroundColor: 'rgba(0,0,0,0.3)',
+                                                                fontSize: '13px',
+                                                            }}
+                                                            wrapLongLines={true}
+                                                        >
+                                                            {result.content}
+                                                        </SyntaxHighlighter>
+
+                                                        {/* Gradient fade for collapsed state */}
+                                                        {!expandedBlocks.has(result.block_id) && result.content.split('\n').length > 10 && (
+                                                            <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/90 to-transparent pointer-events-none"></div>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Expand/Collapse Button */}
+                                                    {result.content.split('\n').length > 10 && (
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                toggleExpand(result.block_id);
+                                                            }}
+                                                            className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-purple-600 hover:bg-purple-500 text-white text-xs px-4 py-1.5 rounded-full shadow-lg z-10 transition-all"
+                                                        >
+                                                            {expandedBlocks.has(result.block_id) ? 'Show Less ▲' : 'Show More ▼'}
+                                                        </button>
+                                                    )}
 
                                                     {/* Copy Overlay */}
                                                     <div className="absolute top-2 right-2 opacity-0 group-hover/code:opacity-100 transition-opacity">
