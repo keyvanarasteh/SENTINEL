@@ -14,7 +14,7 @@ from app.schemas.v2_schemas import GitAnalysisRequest, GitAnalysisResponse, GitE
 router = APIRouter(prefix="/api/git", tags=["git"])
 
 @router.post("/estimate", response_model=GitEstimateResponse)
-async def estimate_repo(request: GitEstimateRequest):
+def estimate_repo(request: GitEstimateRequest):
     """
     Estimate clone/analysis time based on repo size.
     """
@@ -24,8 +24,8 @@ async def estimate_repo(request: GitEstimateRequest):
     size_kb = info.get('size_kb', 0)
     
     # Estimation logic:
-    # Assume 5 Mbps download speed (~625 KB/s) for cloning
-    # Plus ~10ms processing per KB for analysis overhead
+    # Assume 25 Mbps download speed (~3125 KB/s) for cloning
+    # Plus ~1ms processing per KB for analysis overhead
     # Minimum 5 seconds
     
     if size_kb == 0:
@@ -35,8 +35,8 @@ async def estimate_repo(request: GitEstimateRequest):
             estimated_seconds=15 # Default conservative estimate
         )
         
-    download_seconds = size_kb / 625
-    processing_seconds = size_kb * 0.005 # 5ms per KB
+    download_seconds = size_kb / 3125
+    processing_seconds = size_kb * 0.001 # 1ms per KB
     
     total_seconds = int(download_seconds + processing_seconds + 5) # Buffer
     
@@ -46,7 +46,7 @@ async def estimate_repo(request: GitEstimateRequest):
     )
 
 @router.post("/analyze", response_model=GitAnalysisResponse)
-async def analyze_repo(
+def analyze_repo(
     request: GitAnalysisRequest,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
@@ -130,7 +130,7 @@ async def analyze_repo(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/users/{username}/repos")
-async def get_user_repos(username: str):
+def get_user_repos(username: str):
     """
     Fetch all public repositories for a GitHub user.
     

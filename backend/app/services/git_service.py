@@ -233,6 +233,8 @@ class GitService:
                         'description': repo.get('description', 'No description'),
                         'language': repo.get('language', 'Unknown'),
                         'stargazers_count': repo.get('stargazers_count', 0),
+                        'watchers_count': repo.get('watchers_count', 0),
+                        'size': repo.get('size', 0), # API returns KB. Frontend divides by 1024 to get MB.
                         'html_url': repo['html_url'],
                         'clone_url': repo['clone_url'],
                         'updated_at': repo['updated_at']

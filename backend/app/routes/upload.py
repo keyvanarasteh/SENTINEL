@@ -47,7 +47,9 @@ async def upload_file(
     allowed_extensions = {
         '.pdf', '.docx', '.txt', '.md', '.log', '.sh', '.bat',
         '.config', '.ini', '.env', '.yaml', '.yml', '.json', '.xml',
-        '.html', '.htm', '.css', '.js', '.ts', '.csv', '.sql'
+        '.html', '.htm', '.css', '.js', '.jsx', '.ts', '.tsx', '.csv', '.sql',
+        '.py', '.rb', '.php', '.java', '.c', '.cpp', '.h', '.hpp', '.go', '.rs',
+        '.kt', '.swift', '.m', '.dart', '.vue', '.scala', '.r'
     }
     
     file_ext = Path(file.filename).suffix.lower()
