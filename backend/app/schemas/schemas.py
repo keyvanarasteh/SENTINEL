@@ -36,6 +36,7 @@ class ExtractionResponse(BaseModel):
     total_blocks: int
     blocks: List[ExtractedBlockSchema]
     processing_time: float
+    stats: Optional[dict] = None
 
 
 class FeedbackRequest(BaseModel):

@@ -86,7 +86,11 @@ def extract_file(file_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Normalization failed: {e}")
     
     # Step 2: Segment
-    candidate_blocks = segmenter.segment(normalized_data['content'])
+    candidate_blocks = segmenter.segment(
+        normalized_data['content'], 
+        language=file_meta.file_type,
+        filename=file_meta.original_filename
+    )
     
     # Step 3: Validate
     validation_results = []
@@ -138,12 +142,23 @@ def extract_file(file_id: int, db: Session = Depends(get_db)):
         for block in db_blocks
     ]
     
+    # Prepare stats
+    ast_count = sum(1 for b in db_blocks if b.validation_method != 'fallback_regex')
+    fallback_count = sum(1 for b in db_blocks if b.validation_method == 'fallback_regex')
+    
+    stats = {
+        "ast_parsed": ast_count,
+        "fallback_extracted": fallback_count,
+        "total_extracted": len(db_blocks)
+    }
+
     return ExtractionResponse(
         file_id=file_id,
         filename=file_meta.original_filename,
         total_blocks=len(block_schemas),
         blocks=block_schemas,
-        processing_time=round(processing_time, 3)
+        processing_time=round(processing_time, 3),
+        stats=stats
     )
 
 

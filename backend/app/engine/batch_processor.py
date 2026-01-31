@@ -111,7 +111,10 @@ class BatchProcessor:
             # 2. Segment
             # Returns List[CandidateBlock] objects
             segments = await asyncio.to_thread(
-                self.segmenter.segment, normalized_text
+                self.segmenter.segment, 
+                normalized_text,
+                language=file.file_type,
+                filename=file.filename
             )
             
             extracted_blocks = []

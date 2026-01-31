@@ -18,6 +18,24 @@ class TreeSitterManager:
         'c', 'cpp', 'go', 'rust',
         'ruby', 'php', 'c_sharp', 'swift', 'kotlin', 'bash', 'tsx'
     }
+
+    EXTENSION_MAP = {
+        'py': 'python',
+        'js': 'javascript',
+        'ts': 'typescript',
+        'java': 'java',
+        'c': 'c',
+        'cpp': 'cpp', 'h': 'cpp', 'hpp': 'cpp',
+        'cs': 'c_sharp',
+        'go': 'go',
+        'rs': 'rust',
+        'rb': 'ruby',
+        'php': 'php',
+        'swift': 'swift',
+        'kt': 'kotlin',
+        'sh': 'bash', 'bash': 'bash',
+        'tsx': 'tsx'
+    }
     
     def __new__(cls):
         """Singleton pattern."""
@@ -227,3 +245,16 @@ class TreeSitterManager:
                     return False
         
         return len(stack) == 0
+
+    def parse(self, code: str, language: str):
+        """
+        Parse code and return AST tree.
+        """
+        parser = self.get_parser(language)
+        if not parser:
+            return None
+        return parser.parse(bytes(code, 'utf-8'))
+
+    def get_language_from_extension(self, ext: str) -> Optional[str]:
+        """Convert file extension (without dot) to supported language name."""
+        return self.EXTENSION_MAP.get(ext.lower())

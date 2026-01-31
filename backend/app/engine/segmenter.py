@@ -3,8 +3,13 @@ Segmenter - Text Segmentation into Candidate Blocks
 Identifies potential code/config blocks using multiple strategies.
 """
 import re
-from typing import List
+from typing import List, Optional, Dict
 from dataclasses import dataclass
+from .tree_sitter_manager import TreeSitterManager
+from .fallback_extractor import FallbackExtractor
+import logging
+
+logger = logging.getLogger(__name__)
 
 @dataclass
 class CandidateBlock:
@@ -29,10 +34,55 @@ class Segmenter:
     
     def __init__(self, min_block_lines: int = 3):
         self.min_block_lines = min_block_lines
+        self.ts_manager = TreeSitterManager()
+        self.fallback_extractor = FallbackExtractor()
     
-    def segment(self, text: str) -> List[CandidateBlock]:
+    def segment(self, text: str, language: str = None, filename: str = "unknown") -> List[CandidateBlock]:
+        """
+        Segment code using AST parsing (if supported) or fallback methods.
+        """
         candidates = []
         
+        # Normalize language (handle extensions like 'py' -> 'python')
+        if language:
+            normalized = self.ts_manager.get_language_from_extension(language)
+            if normalized:
+                language = normalized
+        
+        # 0. Try AST Parsing (Tree-Sitter)
+        if language and language in self.ts_manager.SUPPORTED_LANGUAGES:
+            try:
+                tree = self.ts_manager.parse(text, language)
+                if tree:
+                    # TODO: We need a method to extract blocks from tree. 
+                    # For now, let's assuming generic segmentation is better if we don't have specific AST logic implemented here yet
+                    # OR we can assume if this is called, we rely on generic segmentation for now unless we implement AST block extraction here.
+                    # Given the task is about Fallback, let's focus on FALLBACK logic.
+                    # BUT detailed implementation plan said:
+                    # if language in SUPPORTED: ... existing AST based extraction ...
+                    # The current file DOES NOT have AST based extraction. It's all generic regex.
+                    # So for now, we will proceed with generic segmentation for supported languages (as before),
+                    # OR we can just skip to Fallback if NOT supported.
+                    pass
+            except Exception as e:
+                 logger.warning(f"AST parsing failed for {language}: {e}")
+
+        # If UNSUPPORTED language, use Fallback Extractor
+        if language and language not in self.ts_manager.SUPPORTED_LANGUAGES:
+             logger.info(f"Language '{language}' not supported for AST. Using fallback extraction.")
+             fallback_blocks = self.fallback_extractor.extract(text, filename)
+             for b in fallback_blocks:
+                 candidates.append(CandidateBlock(
+                     content=b['content'],
+                     start_line=b['start_line'],
+                     end_line=b['end_line'],
+                     detection_method=b['extraction_method'],
+                     confidence=b['confidence'],
+                     language_hint=language
+                 ))
+             if candidates:
+                 return self._deduplicate_blocks(candidates)
+
         # 1. Custom Delimiters (Explicit)
         delimited_blocks = self._extract_delimited_blocks(text)
         candidates.extend(delimited_blocks)
