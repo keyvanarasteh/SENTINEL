@@ -1,6 +1,22 @@
-node_modules/
-dist/
-build/
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+backend/venv/
+
+# Local data / db
+*.db
+data/
+backend/scripts/data/
+backend/tests/data/
+frontend/public/
+
+# macOS
 .DS_Store
-.env
-*.log
+
+# "copy" files
+* 2.py
+* 2.jsx
+* 2.md
+* 2.txt
