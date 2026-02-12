@@ -4,11 +4,12 @@ import { exportBlocks } from '../services/api';
 
 function ExportPanel({ fileId, totalBlocks }) {
     const [exporting, setExporting] = useState(false);
+    const [format, setFormat] = useState('zip');
 
     const handleExport = async () => {
         try {
             setExporting(true);
-            await exportBlocks(fileId);
+            await exportBlocks(fileId, format);
             setExporting(false);
         } catch (error) {
             console.error('Export error:', error);
@@ -24,19 +25,31 @@ function ExportPanel({ fileId, totalBlocks }) {
                     <div>
                         <h3 className="text-xl font-semibold gradient-text">Export Results</h3>
                         <p className="text-sm text-gray-400">
-                            Download {totalBlocks} accepted blocks as categorized ZIP
+                            Download {totalBlocks} accepted blocks
                         </p>
                     </div>
                 </div>
 
-                <button
-                    onClick={handleExport}
-                    disabled={exporting}
-                    className="btn btn-primary flex items-center gap-2 disabled:opacity-50"
-                >
-                    <Download className="w-5 h-5" />
-                    {exporting ? 'Exporting...' : 'Export ZIP'}
-                </button>
+                <div className="flex items-center gap-3">
+                    <select
+                        value={format}
+                        onChange={(e) => setFormat(e.target.value)}
+                        className="bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none focus:border-purple-500/50"
+                    >
+                        <option value="zip">ZIP Archive</option>
+                        <option value="jsonl">JSONL (AI Train)</option>
+                        <option value="parquet">Parquet (Data)</option>
+                    </select>
+
+                    <button
+                        onClick={handleExport}
+                        disabled={exporting}
+                        className="btn btn-primary flex items-center gap-2 disabled:opacity-50"
+                    >
+                        <Download className="w-5 h-5" />
+                        {exporting ? 'Exporting...' : 'Export'}
+                    </button>
+                </div>
             </div>
 
             <div className="mt-6 grid grid-cols-4 gap-4 text-center">

@@ -37,3 +37,7 @@ python-dotenv==1.0.0
 jinja2>=3.1.0
 requests
 GitPython==3.1.41
+
+# Data Export (AI Fine-tuning)
+pandas==2.1.3
+pyarrow==14.0.1

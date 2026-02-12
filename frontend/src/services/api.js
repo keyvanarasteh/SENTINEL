@@ -32,8 +32,8 @@ export const submitFeedback = async (feedbackData) => {
     return response.data;
 };
 
-export const exportBlocks = async (fileId) => {
-    const response = await api.get(`/api/export/${fileId}`, {
+export const exportBlocks = async (fileId, format = 'zip') => {
+    const response = await api.get(`/api/export/${fileId}?format=${format}`, {
         responseType: 'blob',
     });
 
@@ -41,7 +41,13 @@ export const exportBlocks = async (fileId) => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `hpes_export_${fileId}.zip`);
+    
+    // Determine extension
+    let ext = 'zip';
+    if (format === 'jsonl') ext = 'jsonl';
+    if (format === 'parquet') ext = 'parquet';
+    
+    link.setAttribute('download', `hpes_export_${fileId}.${ext}`);
     document.body.appendChild(link);
     link.click();
     link.remove();
