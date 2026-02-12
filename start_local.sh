@@ -35,32 +35,37 @@ echo -e "${BLUE}ℹ️  System Initialization Sequence Initiated...${NC}"
 echo ""
 
 # 1. Backend Check
-echo -n "🔍 Checking Backend Environment... "
-if [ -d "backend/venv" ]; then
-    echo -e "${GREEN}[OK]${NC}"
-else
-    echo -e "${RED}[MISSING]${NC}"
+echo "🔍 Checking Backend Environment..."
+if [ ! -d "backend/venv" ]; then
     echo "⚠️  Creating virtual environment..."
     cd backend
     python3 -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
     cd ..
-    echo -e "${GREEN}✅ Backend environment created.${NC}"
 fi
 
+# Always ensure requirements are installed
+echo "📦 Installing/Updating Backend Dependencies..."
+cd backend
+source venv/bin/activate
+pip install -r requirements.txt
+cd ..
+echo -e "${GREEN}✅ Backend ready.${NC}"
+
 # 2. Frontend Check
-echo -n "🔍 Checking Frontend Dependencies... "
-if [ -d "frontend/node_modules" ]; then
-     echo -e "${GREEN}[OK]${NC}"
-else
-    echo -e "${RED}[MISSING]${NC}"
+echo "🔍 Checking Frontend Environment..."
+if [ ! -d "frontend/node_modules" ]; then
     echo "⚠️  Installing Node modules..."
     cd frontend
     npm install
     cd ..
-    echo -e "${GREEN}✅ Frontend dependencies installed.${NC}"
+else
+    # Check if we need to update
+    echo "📦 Updating Frontend Dependencies..."
+    cd frontend
+    npm install
+    cd ..
 fi
+echo -e "${GREEN}✅ Frontend ready.${NC}"
 
 echo ""
 echo -e "${GREEN}🚀 Starting Services...${NC}"

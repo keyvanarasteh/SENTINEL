@@ -81,6 +81,7 @@ const CommandMenu = () => {
                             <CommandItem icon={Upload} label="Upload" onSelect={() => runCommand(() => navigate('/upload'))} />
                             <CommandItem icon={Search} label="Search" onSelect={() => runCommand(() => navigate('/search'))} />
                             <CommandItem icon={Clock} label="History" onSelect={() => runCommand(() => navigate('/history'))} />
+                            <CommandItem icon={LayoutDashboard} label="HPC Infographic" onSelect={() => runCommand(() => navigate('/infographic'))} />
                             <CommandItem icon={HelpCircle} label="Q&A Knowledge Base" onSelect={() => runCommand(() => navigate('/qa'))} />
                         </Command.Group>
 
